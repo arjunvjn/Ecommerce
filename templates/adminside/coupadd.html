@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title></title>
+	<!-- plugins:css -->
+	<link rel="stylesheet" href="{% static 'adminside/vendors/mdi/css/materialdesignicons.min.css' %}">
+	<link rel="stylesheet" href="{% static 'adminside/vendors/css/vendor.bundle.base.css' %}">
+	<!-- endinject -->
+	<!-- Plugin css for this page -->
+	<link rel="stylesheet" href="{% static 'adminside/vendors/jvectormap/jquery-jvectormap.css' %}">
+	<link rel="stylesheet" href="{% static 'adminside/vendors/flag-icon-css/css/flag-icon.min.css' %}">
+	<link rel="stylesheet" href="{% static 'adminside/vendors/owl-carousel-2/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static 'adminside/vendors/owl-carousel-2/owl.theme.default.min.css' %}">
+	<!-- End plugin css for this page -->
+	<!-- Layout styles -->
+	<link rel="stylesheet" href="{% static 'adminside/css/style.css' %}">
+	<!-- End layout styles -->
+	<link rel="shortcut icon" href="{% static 'adminside/images/favicon.png' %}" />
+</head>
+
+<body>
+	<div class="container-scroller">
+		<!-- partial:partials/_sidebar.html -->
+		<nav class="sidebar sidebar-offcanvas" id="sidebar">
+			<ul class="nav">
+				<li class="nav-item profile">
+					<div class="profile-desc">
+						<div class="profile-pic">
+							<div class="profile-name">
+								<h5 class="mb-0 font-weight-normal">Admin</h5>
+							</div>
+						</div>
+						<a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i
+								class="mdi mdi-dots-vertical"></i></a>
+						<div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list"
+							aria-labelledby="profile-dropdown">
+							<a href="/loginadmin/adminlogout" class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-dark rounded-circle">
+										<i class="mdi mdi-logout text-danger"></i>
+									</div>
+								</div>
+								<div class="preview-item-content">
+									<p class="preview-subject ellipsis mb-1 text-small">Logout</p>
+								</div>
+							</a>
+						</div>
+					</div>
+				</li>
+				<li class="nav-item nav-category">
+					<span class="nav-link">Navigation</span>
+				</li>
+				<li class="nav-item menu-items">
+					<a class="nav-link" href="/loginadmin/home">
+						<span class="menu-icon">
+							<i class="mdi mdi-speedometer"></i>
+						</span>
+						<span class="menu-title">Dashboard</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items">
+					<a class="nav-link" href="/loginadmin/category">
+						<span class="menu-icon">
+							<i class="mdi mdi-laptop"></i>
+						</span>
+						<span class="menu-title">Category Management</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items">
+					<a class="nav-link" href="/loginadmin/product">
+						<span class="menu-icon">
+							<i class="mdi mdi-table-large"></i>
+						</span>
+						<span class="menu-title">Product Management</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items">
+					<a class="nav-link" href="/loginadmin/user">
+						<span class="menu-icon">
+							<i class="mdi mdi-playlist-play"></i>
+						</span>
+						<span class="menu-title">User Management</span>
+					</a>
+				</li>
+
+				<li class="nav-item menu-items">
+					<a class="nav-link" href="/loginadmin/orderman">
+						<span class="menu-icon">
+							<i class="mdi mdi-chart-bar"></i>
+						</span>
+						<span class="menu-title">Order Management</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items">
+					<a class="nav-link" href="/loginadmin/sales">
+						<span class="menu-icon">
+							<i class="mdi mdi-contacts"></i>
+						</span>
+						<span class="menu-title">Sales Report</span>
+					</a>
+				</li>
+				<li class="nav-item menu-items">
+					<a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false"
+						aria-controls="auth">
+						<span class="menu-icon">
+							<i class="mdi mdi-security"></i>
+						</span>
+						<span class="menu-title">Offer Management</span>
+						<i class="menu-arrow"></i>
+					</a>
+					<div class="collapse" id="auth">
+						<ul class="nav flex-column sub-menu">
+							<li class="nav-item"> <a class="nav-link" href="/loginadmin/offercat"> Category Offer </a>
+							</li>
+							<li class="nav-item"> <a class="nav-link" href="/loginadmin/offerpro"> Product Offer </a>
+							</li>
+							<li class="nav-item"> <a class="nav-link" href="/loginadmin/offercoup"> Coupon Offer </a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</nav>
+		<!-- partial -->
+		<!-- partial -->
+		<div class="main-panel">
+			<div class="content-wrapper">
+				<div class="row ">
+					<form action="{{url}}" method="post">
+						{% csrf_token %}
+						<h2></h2>
+
+						<div class="row">
+							<div class="col-4"></div>
+							<div class="form-group col-4">
+								<input type="text" class="form-control" name="ccode" id="ccode"
+									placeholder="Coupon Code" value="{{name}}" style="color: white;">
+								<input type="number" class="form-control" name="offer" id="offer" placeholder="Offer"
+									value="{{val}}" style="color: white; margin-top:1em;" min="0" max="99">
+								<label style="display: none; color:red;" id="err1">Number Only</label><br>
+							</div>
+							<div class="col-4"></div>
+						</div>
+
+						<div class="row">
+							<div class="col-4"></div>
+							<div class="form-group col-4">
+
+								<button type="submit" id="sub" class="btn btn-success btn-lg btn-block">Submit</button>
+
+							</div>
+							<div class="col-4"></div>
+						</div>
+						<div>
+							{% if err %}
+							<h5>{{err}}</h5>
+							{% endif %}
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="{% static 'adminside/vendors/js/vendor.bundle.base.js' %}"></script>
+	<!-- endinject -->
+	<!-- Plugin js for this page -->
+	<script src="{% static 'adminside/vendors/chart.js/Chart.min.js' %}"></script>
+	<script src="{% static 'adminside/vendors/progressbar.js/progressbar.min.js' %}"></script>
+	<script src="{% static 'adminside/vendors/jvectormap/jquery-jvectormap.min.js' %}"></script>
+	<script src="{% static 'adminside/vendors/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>
+	<script src="{% static 'adminside/vendors/owl-carousel-2/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'adminside/js/jquery.cookie.js' %}" type="text/javascript"></script>
+	<!-- End plugin js for this page -->
+	<!-- inject:js -->
+	<script src="{% static 'adminside/js/off-canvas.js' %}"></script>
+	<script src="{% static 'adminside/js/hoverable-collapse.js' %}"></script>
+	<script src="{% static 'adminside/js/misc.js' %}"></script>
+	<script src="{% static 'adminside/js/settings.js' %}"></script>
+	<script src="{% static 'adminside/js/todolist.js' %}"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page -->
+	<script src="{% static 'adminside/js/dashboard.js' %}"></script>
+	<script>
+		$(document).ready(function () {
+			$("#sub").prop('disabled', true);
+			$("#offer").blur(function () {
+				var fname = $(this).val()
+				var check = /^[0-9]+$/
+				if (!check.test(fname)) {
+					$("#err1").show()
+	
+				}
+				else {
+					$("#sub").prop('disabled', false);
+					$("#err1").hide()
+				}
+			})
+		})
+	</script>
+</body>
+
+
+</html>

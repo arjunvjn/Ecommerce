@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+  <link rel="stylesheet" href="@sweetalert2/themes/dark/dark.css">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="sweetalert2/dist/sweetalert2.min.js"></script>
+</head>
+
+<body>
+
+
+
+
+
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+
+
+    <hr>
+    <div class="container bootstrap snippet">
+
+        <div>
+            <a href="\">Go home</a>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-3">
+                <!--left col-->
+
+
+                <div class="text-center">
+                    <img src="{{user.uimage.url}}" class="avatar img-circle img-thumbnail" alt="avatar" name="userimage">
+
+
+                </div>
+                </hr><br>
+
+
+
+
+
+            </div>
+            <!--/col-3-->
+            <div class="col-sm-9">
+                
+
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home">
+                        <hr>
+
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="first_name">
+                                    <h4>First name</h4>
+                                </label>
+                                <input type="text" class="form-control" name="first_name" id="first_name"
+                                    placeholder="{{user.user.first_name}}" title="enter your first name if any." readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="last_name">
+                                    <h4>Last name</h4>
+                                </label>
+                                <input type="text" class="form-control" name="last_name" id="last_name"
+                                    placeholder="{{user.user.last_name}}" title="enter your last name if any." readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="phone">
+                                    <h4>Phone</h4>
+                                </label>
+                                <input type="text" class="form-control" name="phone" id="phone"
+                                    placeholder="{{user.number}}" title="enter your phone number if any." readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="mobile">
+                                    <h4>Username</h4>
+                                </label>
+                                <input type="text" class="form-control" name="username" id="username"
+                                    placeholder="{{user.user.username}}" title="enter your username" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label for="email">
+                                    <h4>Email</h4>
+                                </label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="{{user.user.email}}" title="enter your email." readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <br><a href="/edituser">
+                                        <button type="button" class="btn btn-primary" ><i
+                                                class="glyphicon glyphicon-ok-sign"></i> Edit Profile</button></a>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <br>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changepass"><i
+                                                class="glyphicon glyphicon-ok-sign"></i> Change Password</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                    <!--/tab-pane-->
+
+                </div>
+
+            </div>
+
+            <!--/tab-pane-->
+        </div>
+        <!--/tab-content-->
+        <div class="modal" id="changepass">
+            <div class="modal-dialog">
+              <div class="modal-content">
+          
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Change Password</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+          
+                <!-- Modal body -->
+                <div class="modal-body" style="background-color: rgb(54, 60, 78); color: rgb(0, 0, 0); padding: 30px;">
+                        <form method="POST" action="/change_pass">
+                            {% csrf_token %}
+
+                            <input type="password" placeholder="Current Password" name="cpass" required
+                                style="margin-bottom: 2em;"><br>
+                            <input type="password" placeholder="New Password" name="npass" required
+                                style="margin-bottom: 2em;"><br>
+                            <input type="password" placeholder="Confirm New Password" name="cnpass" required><br>
+                            <div style="margin-top: 2em; margin-left:5em;"> <button type="submit" class="btn"
+                                    style="color: royalblue;">Change Password</button></div>
+                        </form>
+                    </div>
+          
+                
+          
+              </div>
+            </div>
+          </div>
+    </div>
+    <!--/col-9-->
+    <div>
+        {% if err %}
+        <h5>{{err}}</h5>
+        {% endif %}
+    </div>
+    <h3 style="margin-top: 5em; text-align:center;">Saved Addresses</h3>
+    <div class="row" style="margin-top: 5em; margin-left:5em;">
+        {% for i in addr %}
+        <div class="col-md-4" >
+            <p>
+                {{i.name}},{{i.number}},{{i.addr}},{{i.city}},{{i.pin}}
+            <div class="table-data-feature">
+                    
+                
+                    <button type="button" class="btn btn-primary" onclick="del({{i.id}})">
+                        Delete
+                    </button>
+            </div>
+            </p>
+        </div>
+        
+        {% endfor %}
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+
+            var readURL = function (input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('.avatar').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+
+            $(".file-upload").on('change', function () {
+                readURL(this);
+            });
+        });
+    </script>
+    <script>
+        function del(a) {
+			console.log(a)
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-danger',
+					cancelButton: 'btn btn-success'
+				},
+				buttonsStyling: false
+			})
+
+			swalWithBootstrapButtons.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Delete',
+				cancelButtonText: 'Cancel',
+				reverseButtons: true
+			}).then((result) => {
+				if (result.isConfirmed) {
+                    window.location='/deladdr/'+a
+					
+				} else if (
+					/* Read more about handling dismissals below */
+					result.dismiss === Swal.DismissReason.cancel
+				) {
+					
+				}
+			})
+		}
+    </script>
+    <script>
+
+    </script>
+</body>
+
+</html>

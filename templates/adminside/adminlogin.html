@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'adminside/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'adminside/vendors/css/vendor.bundle.base.css' %}">
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'adminside/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'adminside/images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100 m-0">
+          <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+            <div class="card col-lg-4 mx-auto">
+              <div class="card-body px-5 py-5">
+                <h3 class="card-title text-left mb-3">Login</h3>
+                <form action="/loginadmin/" method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="uname" class="form-control p_input">
+                  </div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="psw" class="form-control p_input">
+                  </div>
+                  
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
+                  </div>
+                  
+                  {% if err %}
+							<h5>{{err}}</h5>
+							{% endif %}
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+        </div>
+        <!-- row ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{% static 'adminside/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="{% static 'adminside/js/off-canvas.js' %}"></script>
+    <script src="{% static 'adminside/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'adminside/js/misc.js' %}"></script>
+    <script src="{% static 'adminside/js/settings.js' %}"></script>
+    <script src="{% static 'adminside/js/todolist.js' %}"></script>
+    <!-- endinject -->
+  </body>
+</html>
