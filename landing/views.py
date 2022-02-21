@@ -829,16 +829,21 @@ def coupon_apply(request):
         uname = request.session['login']
         user = User.objects.get(username=uname)
         usr = Userprofile.objects.get(user=user)
-        tot=Cart.objects.filter(user=usr).aggregate(Sum('sub_tot'))
+        if request.session.has_key('buy_now'):
+            pro=Product.objects.get(id=request.session['buy_now'])
+            tot=pro.finalprice
+        else:
+            total=Cart.objects.filter(user=usr).aggregate(Sum('sub_tot'))
+            tot=total['sub_tot__sum']
         if Coupon.objects.filter(coupon_code=code).exists():
             coupon = Coupon.objects.get(coupon_code=code)
             if Order.objects.filter(user=usr, coupon=coupon):
                 return JsonResponse({'f': 1})
             else:
-                tot['sub_tot__sum'] -= (tot['sub_tot__sum']*coupon.offer/100)
+                tot -= (tot*coupon.offer/100)
                 request.session['coupon'] = coupon.id
                 context = {
-                    'tot': tot['sub_tot__sum'],
+                    'tot': tot,
                     'f': f
                 }
             return JsonResponse(context)
