@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.http.response import JsonResponse
 from django.contrib import messages
 from django.shortcuts import redirect, render
@@ -33,7 +32,7 @@ def guest_to_user(request):
                         i.qty += g.qty
                         i.save()
                         g.delete()
-            gcart.update(user=user, guest=NULL)
+            gcart.update(user=user, guest='')
 
 
 # Landing Page function
