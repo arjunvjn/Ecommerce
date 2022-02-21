@@ -94,7 +94,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="agile_inner_drop_nav_info">
 								<div class="col-sm-4 multi-gd-img">
 									<ul class="multi-column-dropdown">
-										{% for c in cat %}
+										{% for c in ca %}
 										<li>
 											<a href="{% url 'category' c.id %}">{{c.cat_name}}</a>
 										</li>
@@ -265,7 +265,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<div class="product-sec1">
 						<h3 class="heading-tittle">{{i.cat_name}}</h3>
 						<div style="text-align: end;"><a href="{% url 'category' i.id %}"><button class="btn btn-primary">view all</button> </a> </div>
+						
 						{% for j in pro %}
+						
 						{% if j.category == i %}
 						<div class="col-md-4 product-men">
 							<div class="men-pro-item simpleCart_shelfItem">
@@ -299,6 +301,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 										<button class="acart btn btn-primary" data-index="{{j.id}}">Add to Cart</button>
 									</div>
+									{% if user %}
+
+									<div
+										class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out " style="margin-top: 2em;">
+										<a href="{% url 'buy_now' j.id %}"><button class="acart btn btn-primary">Buy
+												Now</button></a>
+									</div>
+								
+									{% endif %}
 
 								</div>
 							</div>

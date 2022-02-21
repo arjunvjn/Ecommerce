@@ -125,7 +125,7 @@
 
 <body>
 	<div class="signup-form">
-		<form action="{{url}}" method="post">
+		<form action="{{url}}" method="post" id="otpform">
 			{% csrf_token %}
 			<h2>OTP</h2>
 			
@@ -137,19 +137,20 @@
 			</div>
 			
 			<div class="form-group">
-				<button type="submit" id="sotp" class="btn btn-success btn-lg btn-block">Login</button>
+				<button type="button" onclick="sotp()" class="btn btn-success btn-lg btn-block">Login</button>
 			</div>
+			<p id="timer">Resend otp in <h6 id="resend"></h6></p>
 			<div>
 				{% if err %}
 				<h5>{{err}}</h5>
 				{% endif %}
 			</div>
 		</form>
+		<a href="/otp_resend"><button id="resend_otp" class="btn btn-primary" style="display:none">Resend OTP</button> </a>
 	</div>
 </body>
 <script>
 	$(document).ready(function(){
-		$("#sotp").prop('disabled', true);
 		$("#otp").blur(function(){
 			var fname=$(this).val()
 			var check=/^[0-9]+$/
@@ -158,10 +159,43 @@
 
 			}
 			else{
-				$("#sotp").prop('disabled', false);
 				$("#err1").hide()
 			}
 		})
 	})
+	function sotp(){
+		var otp=document.getElementById('otp').value
+		var check=/^[0-9]+$/
+		if((check.test(otp))&&(otp.length==6)){
+			document.getElementById('otpform').submit()
+		}
+	}
+</script>
+<script>
+	var min = 0
+	sec = 10
+	function refresh() {
+
+		 if (sec == 0 && min >= 1) {
+			  min = min - 1
+			  sec = 59
+		 }
+		 if (sec != 0) {
+			  setTimeout(refresh, 1000)
+			  sec -= 1
+			  if(sec<10){
+				$("#resend").html('  0' + min + ' : 0' + sec)
+			  }
+			  else{
+				$("#resend").html('  0' + min + ' : ' + sec)
+			  }
+			  
+		 } else {
+			  document.getElementById('resend_otp').style.display='block'
+			  document.getElementById('timer').style.display='none'
+			  document.getElementById('resend').style.display='none'
+		 }
+	}
+	refresh()
 </script>
 </html>

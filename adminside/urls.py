@@ -30,5 +30,7 @@ urlpatterns=[
     path('sales_search',views.sales_search,name='sales_search'),
     path('export_excel',views.export_excel,name='export_excel'),
     path('search_pro',views.search_pro,name='search_pro'),
-    path('search_cat',views.search_cat,name='search_cat')
+    path('search_cat',views.search_cat,name='search_cat'),
+    path('month',views.month,name='month'),
+    path('year',views.year,name='year'),
 ]

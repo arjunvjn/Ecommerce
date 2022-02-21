@@ -95,6 +95,7 @@ def home(request):
 @never_cache
 def user(request):
     if request.user.is_authenticated:
+        User.objects.filter(is_active=False).delete()
         usr = Userprofile.objects.all()
         return render(request, 'adminside/useradmin.html', {'user': usr})
     else:
@@ -507,6 +508,10 @@ def sales_search(request):
                 todate = ''
             request.session['fromdate'] = fromdate
             request.session['todate'] = todate
+            if request.session.has_key('month'):
+                del request.session['month']
+            if request.session.has_key('year'):
+                del request.session['year']
             if fromdate == '' and todate == '':
                 ord = Order.objects.all().order_by('-date')
             elif fromdate == '':
@@ -539,14 +544,27 @@ def export_excel(request):
     font_style = xlwt.XFStyle()
     if request.session.has_key('fromdate'):
         fromdate = request.session['fromdate']
+        del request.session['fromdate']
     else:
         fromdate = ''
     if request.session.has_key('todate'):
         todate = request.session['todate']
+        del request.session['todate']
     else:
         todate = ''
     if fromdate == '' and todate == '':
-        rows = Order.objects.all().values_list('date__date', 'order_uuid', 'pro', 'qty',
+        if request.session.has_key('month'):
+            month_year=request.session['month']
+            year,month=month_year.split('-')
+            rows = Order.objects.filter(date__month=month,date__year=year).values_list(
+            'date__date', 'order_uuid', 'pro', 'qty', 'pay', 'addr', 'sub_tot', 'status').order_by('-date')
+            del request.session['month']
+        elif request.session.has_key('year'):
+            rows = Order.objects.filter(date__year=request.session['year']).values_list(
+            'date__date', 'order_uuid', 'pro', 'qty', 'pay', 'addr', 'sub_tot', 'status').order_by('-date')
+            del request.session['year']
+        else:
+            rows = Order.objects.all().values_list('date__date', 'order_uuid', 'pro', 'qty',
                                                'pay', 'addr', 'sub_tot', 'status').order_by('-date')
     elif fromdate == '':
         rows = Order.objects.filter(date__lt=todate).values_list(
@@ -604,5 +622,48 @@ def search_cat(request):
                 return redirect('/loginadmin')
         else:
             return redirect('/loginadmin')
+    else:
+        return redirect('/loginadmin')
+
+# For sorting based on month
+@never_cache
+def month(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            month_year = request.POST['month']
+            if request.session.has_key('fromdate'):
+                del request.session['fromdate']
+            if request.session.has_key('todate'):
+                del request.session['todate']
+            if request.session.has_key('year'):
+                del request.session['year']
+            if month_year!='':
+                month=month_year.split('-')
+                request.session['month']=month_year
+                ord = Order.objects.filter(date__month=month[1],date__year=month[0]).order_by('-date')
+            else:
+                ord = Order.objects.all().order_by('-date')
+            return render(request, 'adminside/salesreport.html', {'ord': ord})
+    else:
+        return redirect('/loginadmin')
+
+# For sorting based on year
+@never_cache
+def year(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if request.session.has_key('fromdate'):
+                del request.session['fromdate']
+            if request.session.has_key('todate'):
+                del request.session['todate']
+            if request.session.has_key('month'):
+                del request.session['month']
+            year = int(request.POST['year'])
+            if year!='':
+                request.session['year']=year
+                ord = Order.objects.filter(date__year=year).order_by('-date')
+            else:
+                ord = Order.objects.all().order_by('-date')
+            return render(request, 'adminside/salesreport.html', {'ord': ord})
     else:
         return redirect('/loginadmin')

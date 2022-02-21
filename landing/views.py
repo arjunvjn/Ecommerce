@@ -43,16 +43,22 @@ def index(request):
         user = request.session['login']
     else:
         user = None
+    if request.session.has_key('buy_now'):
+        del request.session['buy_now']
     # To get products whose stoke is greater than zero
     prod = Product.objects.filter(stock__gt=0)
-    cat = Category.objects.all()
+    ca = Category.objects.all()
+    cat=[]
     pro = []
-    for i in cat:
-        pro.extend(prod.filter(category=i).order_by('-date')[:3])
+    for i in ca:
+        if Product.objects.filter(category=i).exists():
+            pro.extend(prod.filter(category=i).order_by('-date')[:3])
+            cat.append(i)
     context = {
         'pro': pro,
         'cat': cat,
-        'user': user
+        'user': user,
+        'ca':ca
     }
     return render(request, 'landing/index.html', context)
 
@@ -62,6 +68,7 @@ def signup(request):
     if request.session.has_key('login'):
         return redirect('/')
     elif request.method == 'POST':
+        User.objects.filter(is_active=False).delete()
         num = request.POST['num']
         uname = request.POST['uname']
         lname = request.POST['lname']
@@ -85,37 +92,12 @@ def signup(request):
             uprofile.save()
             request.session['num'] = num
             if send(num):
-                return render(request, 'landing/otp.html', {'url': '/otpr'})
+                return render(request, 'landing/otp.html', {'url': '/otp'})
             else:
                 messages.info(request, "Invalid Number")
                 return render(request, 'landing/signup.html')
     else:
         return render(request, 'landing/signup.html')
-
-# Signup OTP verification
-@never_cache
-def signup_otp(request):
-    if request.session.has_key('login'):
-        return redirect('/')
-    elif request.session.has_key('num'):
-        if request.method == 'POST':
-            otp = request.POST['otp']
-            num = request.session['num']
-            if verify(otp, num) == "approved":
-                usr = Userprofile.objects.get(number=num)
-                user = User.objects.get(id=usr.user.id)
-                user.is_active = True
-                user.save()
-                del request.session['num']
-                request.session['login'] = user.username
-                guest_to_user(request)
-                return redirect('/')
-            else:
-                return render(request, 'landing/otp.html', {'url': '/otpr', 'err': "Wrong OTP"})
-        else:
-            return redirect('/signup')
-    else:
-        return redirect('/signup')
 
 # Signin with username function
 @never_cache
@@ -123,6 +105,7 @@ def signin(request):
     if request.session.has_key('login'):
         return redirect('/')
     elif request.method == "POST":
+        User.objects.filter(is_active=False).delete()
         uname = request.POST['user']
         psw = request.POST['psw']
         user = auth.authenticate(username=uname, password=psw)
@@ -148,6 +131,7 @@ def signin_num(request):
     if request.session.has_key('login'):
         return redirect('/')
     elif request.method == "POST":
+        User.objects.filter(is_active=False).delete()
         num = request.POST['num']
         if Userprofile.objects.filter(number=num).exists():
             usr = Userprofile.objects.get(number=num)
@@ -177,15 +161,19 @@ def signin_otp(request):
             if verify(otp, num) == "approved":
                 del request.session['num']
                 usr = Userprofile.objects.get(number=num)
+                user = User.objects.get(id=usr.user.id)
+                if not user.is_active:
+                    user.is_active = True
+                    user.save()
                 request.session['login'] = usr.user.username
                 guest_to_user(request)
                 return redirect('/')
             else:
                 return render(request, 'landing/otp.html', {'url': '/otp', 'err': "Wrong OTP"})
         else:
-            return render(request, 'landing/signin.html')
+            return render(request, 'landing/signin.html',{'url': '/otp'})
     else:
-        return render(request, 'landing/signin.html')
+        return render(request, 'landing/signin.html',{'url': '/otp'})
 
 # Product detail function
 @never_cache
@@ -194,6 +182,8 @@ def single(request, id=-1):
         user = request.session['login']
     else:
         user = None
+    if request.session.has_key('buy_now'):
+        del request.session['buy_now']
     if id == -1:
         return redirect('/')
     else:
@@ -213,6 +203,8 @@ def category(request, id=-1):
         user = request.session['login']
     else:
         user = None
+    if request.session.has_key('buy_now'):
+        del request.session['buy_now']
     if id == -1:
         return redirect('/')
     else:
@@ -399,28 +391,44 @@ def delcart(request):
 def address(request):
     if request.session.has_key('login'):
         uname = request.session['login']
+        if request.session.has_key('coupon'):
+            del request.session['coupon']
         user = User.objects.get(username=uname)
         usr = Userprofile.objects.get(user=user)
-        cart = Cart.objects.filter(user=usr)
-        c = Category.objects.all()
-        tot = 0
-        for i in cart:
-            # To delete product from cart if cart quantity is less than product stock
-            if i.qty > i.pro.stock:                   
-                i.delete()
-            i.sub_tot = i.qty*i.pro.finalprice
-            tot += i.sub_tot
-            i.save()
-        uaddr = Useraddr.objects.filter(user=usr)
-        uaddr.filter(saddr=False).delete()
-        form = Useraddrf()
-        context = {
-            'addr': uaddr,
-            'form': form,
-            'cat': c,
-            'user': uname,
-            'tot': tot
-        }
+        if request.session.has_key('buy_now'):
+            pro=Product.objects.filter(id=request.session['buy_now'])
+            tot=pro[0].finalprice
+            uaddr = Useraddr.objects.filter(user=usr)
+            uaddr.filter(saddr=False).delete()
+            form = Useraddrf()
+            context = {
+                'addr': uaddr,
+                'form': form,
+                'cat': pro,
+                'user': uname,
+                'tot': tot
+            }
+        else:
+            cart = Cart.objects.filter(user=usr)
+            c = Category.objects.all()
+            tot = 0
+            for i in cart:
+                # To delete product from cart if cart quantity is less than product stock
+                if i.qty > i.pro.stock:                   
+                    i.delete()
+                i.sub_tot = i.qty*i.pro.finalprice
+                tot += i.sub_tot
+                i.save()
+            uaddr = Useraddr.objects.filter(user=usr)
+            uaddr.filter(saddr=False).delete()
+            form = Useraddrf()
+            context = {
+                'addr': uaddr,
+                'form': form,
+                'cat': c,
+                'user': uname,
+                'tot': tot
+            }
         return render(request, 'landing/address.html', context)
     else:
         return redirect('/signin')
@@ -430,11 +438,15 @@ def address(request):
 def checkcart(request):
     if request.session.has_key('login'):
         if request.session.has_key('coupon'):
-                del request.session['coupon']
+            del request.session['coupon']
+        if request.session.has_key('buy_now'):
+            del request.session['buy_now']
         uname = request.session['login']
         user = User.objects.get(username=uname)
         usr = Userprofile.objects.get(user=user)
         cart = Cart.objects.filter(user=usr)
+        uaddr = Useraddr.objects.filter(user=usr)
+        uaddr.filter(saddr=False).delete()
         pro = []
         for i in cart:
             if i.qty > i.pro.stock:
@@ -467,7 +479,17 @@ def getaddr(request, id=-1):
         uname = request.session['login']
         user = User.objects.get(username=uname)
         usr = Userprofile.objects.get(user=user)
-        tot=Cart.objects.filter(user=usr).aggregate(Sum('sub_tot'))
+        uaddr = Useraddr.objects.filter(user=usr)
+        uaddr.filter(saddr=False).delete()
+        if request.session.has_key('buy_now'):
+            pro=Product.objects.get(id=request.session['buy_now'])
+            tot=pro.finalprice
+        else:
+            to=Cart.objects.filter(user=usr).aggregate(Sum('sub_tot'))
+            tot=to['sub_tot__sum']
+        if request.session.has_key('coupon'):
+            coup=Coupon.objects.get(id=request.session['coupon'])
+            tot-=(tot*coup.offer/100)
         c = Category.objects.all()
         if id != -1:
             client = razorpay.Client(
@@ -505,7 +527,17 @@ def getnewaddr(request):
         uname = request.session['login']
         user = User.objects.get(username=uname)
         usr = Userprofile.objects.get(user=user)
-        tot=Cart.objects.filter(user=usr).aggregate(Sum('sub_tot'))
+        uaddr = Useraddr.objects.filter(user=usr)
+        uaddr.filter(saddr=False).delete()
+        if request.session.has_key('buy_now'):
+            pro=Product.objects.get(id=request.session['buy_now'])
+            tot=pro.finalprice
+        else:
+            to=Cart.objects.filter(user=usr).aggregate(Sum('sub_tot'))
+            tot=to['sub_tot__sum']
+        if request.session.has_key('coupon'):
+            coup=Coupon.objects.get(id=request.session['coupon'])
+            tot-=(tot*coup.offer/100)
         c = Category.objects.all()
         if request.method == 'POST':
             form = Useraddrf(request.POST)
@@ -561,45 +593,80 @@ def payment(request, id=-1, value=-1):
         else:
             uaddr = Useraddr.objects.get(id=id)
             addr = uaddr.name+","+uaddr.number+","+uaddr.addr+","+uaddr.city+","+uaddr.pin
-            aname = uaddr.name
-            aaddr = uaddr.addr
-            acity = uaddr.city+","+uaddr.pin
-            aphone = uaddr.number
-            cart = Cart.objects.filter(user=usr)
-            orderl = []
-            tot = Cart.objects.filter(user=usr).aggregate(Sum('sub_tot'))
-            for i in cart:
+            c=0
+            if request.session.has_key('buy_now'):
+                pro=Product.objects.get(id=request.session['buy_now'])
                 if request.session.has_key('coupon'):
                     cid = request.session['coupon']
                     coupon = Coupon.objects.get(id=cid)
-                    i.sub_tot -= (i.sub_tot*coupon.offer/100)
-                    i.save()
-                    order = Order.objects.create(pro=i.pro, user=usr, sub_tot=i.sub_tot, qty=i.qty,
-                                                 pay=pay_method[val], status="Order Placed", addr=addr, coupon=coupon)
+                    pro.finalprice -= (pro.finalprice*coupon.offer/100)
+                    order = Order.objects.create(pro=pro, user=usr, sub_tot=pro.finalprice, qty=1,
+                                                    pay=pay_method[val], status="Order Placed", addr=addr, coupon=coupon)
                 else:
                     order = Order.objects.create(
-                        pro=i.pro, user=usr, sub_tot=i.sub_tot, qty=i.qty, pay=pay_method[val], status="Order Placed", addr=addr)
+                            pro=pro, user=usr, sub_tot=pro.finalprice, qty=1, pay=pay_method[val], status="Order Placed", addr=addr)
                 order.save()
-                orderl.append(order)
-                cpro = Product.objects.get(id=i.pro.id)
-                cpro.stock -= i.qty
-                cpro.save()
+                c+=1
+                pro.stock-=1
+                pro.save()
+                del request.session['buy_now']
+            else:
+                cart = Cart.objects.filter(user=usr)
+                for i in cart:
+                    if request.session.has_key('coupon'):
+                        cid = request.session['coupon']
+                        coupon = Coupon.objects.get(id=cid)
+                        i.sub_tot -= (i.sub_tot*coupon.offer/100)
+                        i.save()
+                        order = Order.objects.create(pro=i.pro, user=usr, sub_tot=i.sub_tot, qty=i.qty,
+                                                    pay=pay_method[val], status="Order Placed", addr=addr, coupon=coupon)
+                    else:
+                        order = Order.objects.create(
+                            pro=i.pro, user=usr, sub_tot=i.sub_tot, qty=i.qty, pay=pay_method[val], status="Order Placed", addr=addr)
+                    order.save()
+                    c+=1
+                    cpro = Product.objects.get(id=i.pro.id)
+                    cpro.stock -= i.qty
+                    cpro.save()
+                cart.delete()
             if request.session.has_key('coupon'):
                 del request.session['coupon']
             if uaddr.saddr == False:
                 uaddr.delete()
-            cart.delete()
-            context = {
-                'order': orderl,
-                'name': aname,
-                'addr': aaddr,
-                'city': acity,
-                'number': aphone,
-                'tot': tot
-            }
-            return render(request, 'landing/invoice.html', context)
+            return redirect('/invoice/'+str(c))
     else:
         return redirect('/signin')
+
+# For Invoice
+def invoice(request,c=-1):
+    if c==-1:
+        return redirect('/')
+    else:
+        c=int(c)
+    if request.session.has_key('login'):
+        uname = request.session['login']
+        user = User.objects.get(username=uname)
+        usr = Userprofile.objects.get(user=user)
+        order=Order.objects.filter(user=usr).order_by('-date')[:c]
+        addr=order[0].addr
+        addrs = addr.split(',')
+        aname = addrs[0]
+        aaddr = addrs[2]
+        acity = addrs[3]+","+addrs[4]
+        aphone = addrs[1]
+        tot=order.aggregate(Sum('sub_tot'))
+        context={
+            'name':aname,
+            'addr':aaddr,
+            'city':acity,
+            'number':aphone,
+            'tot':tot['sub_tot__sum'],
+            'order':order
+        }
+        return render(request, 'landing/invoice.html', context)
+    else:
+        return redirect('/')
+
 
 # To load Order page
 @never_cache
@@ -664,6 +731,7 @@ def profile(request):
         user = User.objects.get(username=uname)
         usr = Userprofile.objects.get(user=user)
         addr = Useraddr.objects.filter(user=usr)
+        addr.filter(saddr=False).delete()
         context = {
             'user': usr,
             'addr': addr
@@ -768,10 +836,10 @@ def coupon_apply(request):
             if Order.objects.filter(user=usr, coupon=coupon):
                 return JsonResponse({'f': 1})
             else:
-                tot -= (tot*coupon.offer/100)
+                tot['sub_tot__sum'] -= (tot['sub_tot__sum']*coupon.offer/100)
                 request.session['coupon'] = coupon.id
                 context = {
-                    'tot': tot,
+                    'tot': tot['sub_tot__sum'],
                     'f': f
                 }
             return JsonResponse(context)
@@ -786,6 +854,8 @@ def search(request):
             user = request.session['login']
         else:
             user = None
+        if request.session.has_key('buy_now'):
+            del request.session['buy_now']
         search = request.POST['search']
         c = Category.objects.all()
         prolist = Product.objects.filter(
@@ -799,3 +869,28 @@ def search(request):
         return render(request, 'landing/product.html', context)
     else:
         return render('/')
+
+# To select the product in a price range
+def price_sort(request):
+    if request.method=='POST':
+        min=int(request.POST['min'])
+        max=int(request.POST['max'])+1
+        cnam=request.POST['cname']
+        c = Category.objects.all()
+        if cnam!='':
+            cname=Category.objects.get(cat_name=cnam)
+            pro=Product.objects.filter(category=cname,finalprice__range=[min,max])
+        else:
+            pro=Product.objects.filter(finalprice__range=[min,max])
+        return render(request,'landing/product.html',{'pro':pro,'cat': c})
+
+# Function for buy now
+def buy_now(request,id):
+    request.session['buy_now']=id
+    return redirect('/setaddr')
+
+# OTP resend
+def otp_resend(request):
+    print(request.session['num'])
+    if send(request.session['num']):
+        return render(request, 'landing/otp.html', {'url': '/otp'})

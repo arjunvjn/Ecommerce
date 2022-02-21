@@ -57,72 +57,73 @@
 				</li>
 				<li class="nav-item menu-items">
 					<a class="nav-link" href="/loginadmin/home">
-						<span class="menu-icon">
-							<i class="mdi mdi-speedometer"></i>
-						</span>
-						<span class="menu-title">Dashboard</span>
+					  <span class="menu-icon">
+						<i class="mdi mdi-chart-bar"></i>
+						
+					  </span>
+					  <span class="menu-title">Dashboard</span>
 					</a>
-				</li>
-				<li class="nav-item menu-items">
+				  </li>
+				  <li class="nav-item menu-items">
 					<a class="nav-link" href="/loginadmin/category">
-						<span class="menu-icon">
-							<i class="mdi mdi-laptop"></i>
-						</span>
-						<span class="menu-title">Category Management</span>
+					  <span class="menu-icon">
+						<i class="mdi mdi-basket"></i>
+					  </span>
+					  <span class="menu-title">Category Management</span>
 					</a>
-				</li>
-				<li class="nav-item menu-items">
+				  </li>
+				  <li class="nav-item menu-items">
 					<a class="nav-link" href="/loginadmin/product">
-						<span class="menu-icon">
-							<i class="mdi mdi-table-large"></i>
-						</span>
-						<span class="menu-title">Product Management</span>
+					  <span class="menu-icon">
+						<i class="mdi mdi-wallet-giftcard"></i>
+					  </span>
+					  <span class="menu-title">Product Management</span>
 					</a>
-				</li>
-				<li class="nav-item menu-items">
+				  </li>
+				  <li class="nav-item menu-items">
 					<a class="nav-link" href="/loginadmin/user">
-						<span class="menu-icon">
-							<i class="mdi mdi-playlist-play"></i>
-						</span>
-						<span class="menu-title">User Management</span>
+					  <span class="menu-icon">
+						<i class="mdi mdi-contacts"></i>
+						
+					  </span>
+					  <span class="menu-title">User Management</span>
 					</a>
-				</li>
-
-				<li class="nav-item menu-items">
+				  </li>
+		  
+				  <li class="nav-item menu-items">
 					<a class="nav-link" href="/loginadmin/orderman">
-						<span class="menu-icon">
-							<i class="mdi mdi-chart-bar"></i>
-						</span>
-						<span class="menu-title">Order Management</span>
+					  <span class="menu-icon">
+						<i class="mdi mdi-playlist-play"></i>
+						
+					  </span>
+					  <span class="menu-title">Order Management</span>
 					</a>
-				</li>
-				<li class="nav-item menu-items">
+				  </li>
+				  <li class="nav-item menu-items">
 					<a class="nav-link" href="/loginadmin/sales">
-						<span class="menu-icon">
-							<i class="mdi mdi-contacts"></i>
-						</span>
-						<span class="menu-title">Sales Report</span>
+					  <span class="menu-icon">
+						<i class="mdi mdi-receipt"></i>
+						
+					  </span>
+					  <span class="menu-title">Sales Report</span>
 					</a>
-				</li>
-				<li class="nav-item menu-items">
-					<a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false"
-						aria-controls="auth">
-						<span class="menu-icon">
-							<i class="mdi mdi-security"></i>
-						</span>
-						<span class="menu-title">Offer Management</span>
-						<i class="menu-arrow"></i>
+				  </li>
+				  <li class="nav-item menu-items">
+					<a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+					  <span class="menu-icon">
+						<i class="mdi mdi-percent"></i>
+					  </span>
+					  <span class="menu-title">Offer Management</span>
+					  <i class="menu-arrow"></i>
 					</a>
 					<div class="collapse" id="auth">
-						<ul class="nav flex-column sub-menu">
-							<li class="nav-item"> <a class="nav-link" href="/loginadmin/offercat"> Category Offer </a>
-							</li>
-							<li class="nav-item"> <a class="nav-link" href="/loginadmin/offerpro"> Product Offer </a>
-							</li>
-							<li class="nav-item"> <a class="nav-link" href="/loginadmin/offercoup"> Coupon Offer </a></li>
-						</ul>
+					  <ul class="nav flex-column sub-menu">
+						<li class="nav-item"> <a class="nav-link" href="/loginadmin/offercat"> Category Offer </a></li>
+						<li class="nav-item"> <a class="nav-link" href="/loginadmin/offerpro"> Product Offer </a></li>
+						<li class="nav-item"> <a class="nav-link" href="/loginadmin/offercoup"> Coupon Offer </a></li>
+					  </ul>
 					</div>
-				</li>
+				  </li>
 			</ul>
 		</nav>
 		<!-- partial -->
@@ -130,7 +131,7 @@
 		<div class="main-panel">
 			<div class="content-wrapper">
 				<div class="row ">
-					<form action="{{url}}" method="post">
+					<form action="{{url}}" method="post" id="coupsub">
 						{% csrf_token %}
 						<h2></h2>
 
@@ -140,7 +141,7 @@
 								<input type="text" class="form-control" name="ccode" id="ccode"
 									placeholder="Coupon Code" value="{{name}}" style="color: white;">
 								<input type="number" class="form-control" name="offer" id="offer" placeholder="Offer"
-									value="{{val}}" style="color: white; margin-top:1em;" min="0" max="99">
+									value="{{val}}" style="color: white; margin-top:1em;" min="0" max="90">
 								<label style="display: none; color:red;" id="err1">Number Only</label><br>
 							</div>
 							<div class="col-4"></div>
@@ -150,7 +151,7 @@
 							<div class="col-4"></div>
 							<div class="form-group col-4">
 
-								<button type="submit" id="sub" class="btn btn-success btn-lg btn-block">Submit</button>
+								<button type="button" onclick="sub()" class="btn btn-success btn-lg btn-block">Submit</button>
 
 							</div>
 							<div class="col-4"></div>
@@ -186,7 +187,6 @@
 	<script src="{% static 'adminside/js/dashboard.js' %}"></script>
 	<script>
 		$(document).ready(function () {
-			$("#sub").prop('disabled', true);
 			$("#offer").blur(function () {
 				var fname = $(this).val()
 				var check = /^[0-9]+$/
@@ -195,11 +195,18 @@
 	
 				}
 				else {
-					$("#sub").prop('disabled', false);
 					$("#err1").hide()
 				}
 			})
 		})
+		function sub(){
+			var code=document.getElementById('ccode').value
+			var offer=document.getElementById('offer').value
+			var check = /^[0-9]+$/
+			if((check.test(offer))&&(code!='')){
+				document.getElementById('coupsub').submit()
+			}
+		}
 	</script>
 </body>
 

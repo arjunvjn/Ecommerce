@@ -5,7 +5,6 @@ from . import views
 urlpatterns=[
     path('',views.index,name="index"),
     path('signup',views.signup,name="signup"),
-    path('otpr',views.signup_otp,name="otp"),
     path('signin',views.signin,name="signin"),
     path('otps',views.signin_num,name="otps"),
     path('otp',views.signin_otp,name="otp"),
@@ -31,5 +30,9 @@ urlpatterns=[
     path('deladdr/<id>',views.deladdr,name='deladdr'),
     path('coupon_apply',views.coupon_apply,name='coupon_apply'),
     path('search',views.search,name='search'),
-    path('checkcart',views.checkcart,name='checkcart')
+    path('checkcart',views.checkcart,name='checkcart'),
+    path('price_sort',views.price_sort,name='price_sort'),
+    path('buy_now/<id>',views.buy_now,name='buy_now'),
+    path('otp_resend',views.otp_resend,name='otp_resend'),
+    path('invoice/<c>',views.invoice,name='invoice')
 ]

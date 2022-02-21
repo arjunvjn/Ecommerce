@@ -125,7 +125,7 @@
 
 <body>
 	<div class="signup-form">
-		<form action="/signup" method="post">
+		<form action="/signup" method="post" id="form">
 			{% csrf_token %}
 			<h2>Register</h2>
 			
@@ -160,7 +160,7 @@
 			<label style="display: none; color:red;" id="err4">Password Mismatch</label><br>
 
 			<div class="form-group">
-				<button type="submit" id="reg" class="btn btn-success btn-lg btn-block">Register</button>
+				<button type="button" class="btn btn-success btn-lg btn-block" onclick="reg()" >Register</button>
 			</div>
 			<div>
 				{% for m in messages %}
@@ -173,25 +173,15 @@
 </body>
 <script>
 	$(document).ready(function(){
-		var fn=0,ln=0,e=0,n=0,cp=0,un=0
-		$('#reg').attr('disabled',true)
 		$("#fname").blur(function(){
 			var fname=$(this).val()
 			var lname=$("#lname").val()
 			var check=/^[A-Za-z]+$/
 			if((!check.test(fname)) || (!check.test(lname))){
 				$("#err1").show()
-				fn=0
-				ln=0
-				$('#reg').attr('disabled',true)
 			}
 			else{
 				$("#err1").hide()
-				fn=1
-				ln=1
-				if((fn==1)&&(ln==1)&&(e==1)&&(n==1)&&(cp==1)&&(un==1)){
-					$('#reg').attr('disabled',false)
-				}
 			}
 		})
 		$("#lname").blur(function(){
@@ -200,34 +190,9 @@
 			var check=/^[A-Za-z]+$/
 			if((!check.test(fname)) || (!check.test(lname))){
 				$("#err1").show()
-				fn=0
-				ln=0
-				$('#reg').attr('disabled',true)
 			}
 			else{
 				$("#err1").hide()
-				fn=1
-				ln=1
-				if((fn==1)&&(ln==1)&&(e==1)&&(n==1)&&(cp==1)&&(un==1)){
-					$('#reg').attr('disabled',false)
-				}
-			}
-		})
-		$("#uname").blur(function(){
-			var fname=$(this).val()
-			
-			var check=/^[A-Za-z]+[0-9]*$/
-			if(!check.test(fname)){
-				$("#err1").show()
-				un=0
-				$('#reg').attr('disabled',true)
-			}
-			else{
-				$("#err1").hide()
-				un=1
-				if((fn==1)&&(ln==1)&&(e==1)&&(n==1)&&(cp==1)&&(un==1)){
-					$('#reg').attr('disabled',false)
-				}
 			}
 		})
 		$("#email").blur(function(){
@@ -235,15 +200,9 @@
 			var check=/^[a-z._0-9]+\@[a-z]+\.[a-z]+$/
 			if(!check.test(eid)){
 				$("#err2").show()
-				e=0
-				$('#reg').attr('disabled',true)
 			}
 			else{
-				$("#err2").hide()	
-				e=1
-				if((fn==1)&&(ln==1)&&(e==1)&&(n==1)&&(cp==1)&&(un==1)){
-					$('#reg').attr('disabled',false)
-				}
+				$("#err2").hide()
 			}
 		})
         $("#num").blur(function(){
@@ -251,15 +210,9 @@
             var check=/^[0-9]+$/
             if((!check.test(num)) || (num.length!=10)){
                 $("#err3").show()
-				n=0
-				$('#reg').attr('disabled',true)
             }
             else{
-                $("#err3").hide()	
-				n=1
-				if((fn==1)&&(ln==1)&&(e==1)&&(n==1)&&(cp==1)&&(un==1)){
-					$('#reg').attr('disabled',false)
-				}
+                $("#err3").hide()
             }
         })
 		$("#cpwd").blur(function(){
@@ -267,17 +220,31 @@
 			cpwd=$("#cpwd").val()
 			if (pwd != cpwd){
 				$("#err4").show()
-				cp=0
-				$('#reg').attr('disabled',true)
 			}
 			else{
 				$("#err4").hide()
-				cp=1
-				if((fn==1)&&(ln==1)&&(e==1)&&(n==1)&&(cp==1)&&(un==1)){
-					$('#reg').attr('disabled',false)
-				}
 			}
 		})
 	})
+	function reg(){
+		fname=document.getElementById('fname').value
+		lname=document.getElementById('lname').value
+		uname=document.getElementById('uname').value
+		email=document.getElementById('email').value
+		num=document.getElementById('num').value
+		pwd=document.getElementById('pwd').value
+		cpwd=document.getElementById('cpwd').value
+		ncheck=/^[A-Za-z]+$/
+		echeck=/^[a-z._0-9]+\@[a-z]+\.[a-z]+$/
+		numcheck=/^[0-9]+$/
+		if((ncheck.test(fname))&&(ncheck.test(lname))){
+			if((uname!='')&&(pwd==cpwd)){
+				if((numcheck.test(num))&&(num.length==10)&&(echeck.test(email))){
+					document.getElementById('form').submit()
+				}
+			}
+		}
+
+	}
 </script>
 </html>

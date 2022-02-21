@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="zxx">
@@ -39,7 +38,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 <body>
 	<!-- top-header -->
-	
+
 	<!-- //top-header -->
 	<!-- header-bot-->
 	<div class="header-bot">
@@ -57,7 +56,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!-- header-bot -->
 			<div class="col-md-8 header">
 				<!-- header lists -->
-				
+
 				<!-- //header lists -->
 				<!-- search -->
 				<div class="agileits_search">
@@ -92,33 +91,34 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 			<div class="agileits-navi_search">
 				<ul class="nav navbar-nav menu__list">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle nav-stylehead" data-toggle="dropdown"
-						role="button" aria-haspopup="true" aria-expanded="false">Categories
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu multi-column columns-2">
-						<div class="agile_inner_drop_nav_info">
-							<div class="col-sm-4 multi-gd-img">
-								<ul class="multi-column-dropdown">
-									{% for c in cat %}
-									<li>
-										<a href="{% url 'category' c.id %}">{{c.cat_name}}</a>
-									</li>
-									{% endfor %}
-								</ul>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle nav-stylehead" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expanded="false">Categories
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu multi-column columns-2">
+							<div class="agile_inner_drop_nav_info">
+								<div class="col-sm-4 multi-gd-img">
+									<ul class="multi-column-dropdown">
+										{% for c in cat %}
+										<li>
+											<a href="{% url 'category' c.id %}">{{c.cat_name}}</a>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
 							</div>
-						</div>
-					</ul>
-				</li></ul>
+						</ul>
+					</li>
+				</ul>
 			</div>
 			<div class="top_nav_left">
 				<nav class="navbar navbar-default">
 					<div class="container-fluid">
 						<!-- Brand and toggle get grouped for better mobile display -->
 						<div class="navbar-header">
-							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-							    aria-expanded="false">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+								data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 								<span class="sr-only">Toggle navigation</span>
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
@@ -130,7 +130,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<ul class="nav navbar-nav menu__list">
 								<li>
 									<a class="nav-stylehead" href="/">Home
-										
+
 									</a>
 								</li>
 								{% if user %}
@@ -154,7 +154,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													</li>
 
 												</ul>
-											</div>	
+											</div>
 										</div>
 									</ul>
 								</li>
@@ -178,6 +178,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- //navigation -->
 	<!-- banner-2 -->
 	<div class="page-head_agile_info_w3l">
+
+	</div>
+	<div style="margin-top: 4em;" class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4" style="margin-top: 4em;">
+			<div class="row">
+				
+				
+				<label>Price range:</label>
+				<form action="/price_sort" method="post">
+					{% csrf_token %}
+					<input type="number" name="min" id="min" placeholder="Min Price">
+					<input type="number" name="max" id="max" placeholder="Max Price">
+					<input type="hidden" name="cname" value="{{cname}}">
+					<button id="price_btn" class="btn btn-primary" type="submit">Search</button>
+				</form>
+			
+			</div>
+		</div>
+		<div class="col-md-4"></div>
 
 	</div>
 	<!-- //banner-2 -->
@@ -207,10 +227,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<img src="{{i.img1.url}}" alt="" style="width: 10em; height:10em;">
 									<div class="men-cart-pro">
 										<div class="inner-men-cart-pro">
-											<a href="{% url 'single' i.id %}" class="link-product-add-cart">Quick View</a>
+											<a href="{% url 'single' i.id %}" class="link-product-add-cart">Quick
+												View</a>
 										</div>
 									</div>
-									{% if i.offer == 0 and i.category.offer == 0 %} {% elif i.offer > i.category.offer  %}
+									{% if i.offer == 0 and i.category.offer == 0 %} {% elif i.offer > i.category.offer %}
 									<span class="product-new-top">{{i.offer}}%</span>
 									{% else %}
 									<span class="product-new-top">{{i.category.offer}}%</span>
@@ -226,9 +247,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<del>Rs. {{i.price}}</del>
 										{% endif %}
 									</div>
-									<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+									<div
+										class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out ">
 										<button class="acart btn btn-primary" data-index="{{i.id}}">Add to Cart</button>
 									</div>
+									{% if user %}
+
+									<div
+										class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out " style="margin-top: 2em;">
+										<a href="{% url 'buy_now' i.id %}"><button class="acart btn btn-primary">Buy
+												Now</button></a>
+									</div>
+								
+									{% endif %}
 
 								</div>
 							</div>
@@ -591,17 +622,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			$("#slider-range").slider({
 				range: true,
 				min: 0,
-				max: 9000,
-				values: [50, 6000],
+				max: 2000,
+				values: [50, 1000],
 				slide: function (event, ui) {
-					$("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+					$("#amount").val("Rs." + ui.values[0] + " - Rs." + ui.values[1]);
 				}
 			});
-			$("#amount").val("$" + $("#slider-range").slider("values", 0) + " - $" + $("#slider-range").slider("values", 1));
+			$("#amount").val("Rs." + $("#slider-range").slider("values", 0) + " - Rs." + $("#slider-range").slider("values", 1));
+
 
 		}); //]]>
 	</script>
 	<!-- //price range (top products) -->
+	
 
 	<!-- flexisel (for special offers) -->
 	<script src="{% static 'landing/js/jquery.flexisel.js' %}"></script>
@@ -667,10 +700,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				dataType: 'json',
 				success: function (res) {
 					console.log(res.f)
-					if(res.f==0){
-						window.location='/signin'
+					if (res.f == 0) {
+						window.location = '/signin'
 					}
-					else{
+					else {
 						Swal.fire('Added to Cart')
 					}
 				}

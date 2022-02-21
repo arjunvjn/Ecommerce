@@ -36,7 +36,6 @@
         <li class="nav-item profile">
           <div class="profile-desc">
             <div class="profile-pic">
-              </div> -->
               <div class="profile-name">
                 <h5 class="mb-0 font-weight-normal">Admin</h5>
               </div>
@@ -63,7 +62,8 @@
         <li class="nav-item menu-items">
           <a class="nav-link" href="/loginadmin/home">
             <span class="menu-icon">
-              <i class="mdi mdi-speedometer"></i>
+              <i class="mdi mdi-chart-bar"></i>
+              
             </span>
             <span class="menu-title">Dashboard</span>
           </a>
@@ -71,7 +71,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" href="/loginadmin/category">
             <span class="menu-icon">
-              <i class="mdi mdi-laptop"></i>
+              <i class="mdi mdi-basket"></i>
             </span>
             <span class="menu-title">Category Management</span>
           </a>
@@ -79,7 +79,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" href="/loginadmin/product">
             <span class="menu-icon">
-              <i class="mdi mdi-table-large"></i>
+              <i class="mdi mdi-wallet-giftcard"></i>
             </span>
             <span class="menu-title">Product Management</span>
           </a>
@@ -87,7 +87,8 @@
         <li class="nav-item menu-items">
           <a class="nav-link" href="/loginadmin/user">
             <span class="menu-icon">
-              <i class="mdi mdi-playlist-play"></i>
+              <i class="mdi mdi-contacts"></i>
+              
             </span>
             <span class="menu-title">User Management</span>
           </a>
@@ -96,7 +97,8 @@
         <li class="nav-item menu-items">
           <a class="nav-link" href="/loginadmin/orderman">
             <span class="menu-icon">
-              <i class="mdi mdi-chart-bar"></i>
+              <i class="mdi mdi-playlist-play"></i>
+              
             </span>
             <span class="menu-title">Order Management</span>
           </a>
@@ -104,7 +106,8 @@
         <li class="nav-item menu-items">
           <a class="nav-link" href="/loginadmin/sales">
             <span class="menu-icon">
-              <i class="mdi mdi-contacts"></i>
+              <i class="mdi mdi-receipt"></i>
+              
             </span>
             <span class="menu-title">Sales Report</span>
           </a>
@@ -112,7 +115,7 @@
         <li class="nav-item menu-items">
           <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
             <span class="menu-icon">
-              <i class="mdi mdi-security"></i>
+              <i class="mdi mdi-percent"></i>
             </span>
             <span class="menu-title">Offer Management</span>
             <i class="menu-arrow"></i>
@@ -133,7 +136,8 @@
           <div class="col-10 grid-margin">
             <div class="card">
               <div class="card-body">
-                <div class="row">
+                <div>Sales Report</div>
+                <div class="row" style="margin-top: 2em;">
                   <div class="col-6">
                     <form action="/loginadmin/sales_search" method="post">
                       {% csrf_token %}
@@ -151,10 +155,28 @@
                     </form>
                   </div>
                   <div class="col-3" style="text-align: end;">
-                    <a href="/loginadmin/export_excel" class="btn btn-primary" >Export Excel</a>
+                    <a href="/loginadmin/export_excel" class="btn btn-primary">Export Excel</a>
                   </div>
                   <div class="col-3">
                     <button class="btn" onclick="createPDF()" style="background-color: red;">Export PDF</button>
+                  </div>
+                </div>
+                <div class="row" style="margin-top: 2em;">
+                  <div class="col-md-4">
+                    <form method="post" action="/loginadmin/month">
+                      {% csrf_token %}
+                      <label>Month:</label>
+                      <input type="month" id="month" name="month" onclick="monthclick()">
+                      <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                  </div>
+                  <div class="col-md-4">
+                    <form id="year_form" method="post" action="/loginadmin/year">
+                      {% csrf_token %}
+                      <input type="number" id="year" name="year" placeholder="Enter Year" min="1900">
+                      <label style="display: none; color:red;" id="err">Year Only</label>
+                      <button type="button" class="btn btn-primary" onclick="year_search()">Search</button>
+                    </form>
                   </div>
                 </div>
                 <div class="table-responsive" style="overflow-x:auto;" id="tab">
@@ -196,7 +218,6 @@
         </div>
       </div>
     </div>
-  </div>
   </div>
   <script src="{% static 'adminside/vendors/js/vendor.bundle.base.js' %}"></script>
   <!-- endinject -->
@@ -295,18 +316,18 @@
       var from = document.getElementById('from')
       if (to == "") {
         var nowDate = new Date();
-        var date = nowDate.getFullYear()+'-'
-        if((nowDate.getMonth() + 1)<10){
-          date+='0'+(nowDate.getMonth() + 1)+'-'
+        var date = nowDate.getFullYear() + '-'
+        if ((nowDate.getMonth() + 1) < 10) {
+          date += '0' + (nowDate.getMonth() + 1) + '-'
         }
-        else{
-          date+=(nowDate.getMonth() + 1)+'-'
+        else {
+          date += (nowDate.getMonth() + 1) + '-'
         }
-        if(nowDate.getDate()<10){
-          date+='0'+nowDate.getDate()
+        if (nowDate.getDate() < 10) {
+          date += '0' + nowDate.getDate()
         }
-        else{
-          date+=nowDate.getDate()
+        else {
+          date += nowDate.getDate()
         }
         from.setAttribute("max", date);
       }
@@ -319,18 +340,18 @@
       var to = document.getElementById('to')
       var from = document.getElementById('from').value
       var nowDate = new Date();
-      var date = nowDate.getFullYear()+'-'
-      if((nowDate.getMonth() + 1)<10){
-        date+='0'+(nowDate.getMonth() + 1)+'-'
+      var date = nowDate.getFullYear() + '-'
+      if ((nowDate.getMonth() + 1) < 10) {
+        date += '0' + (nowDate.getMonth() + 1) + '-'
       }
-      else{
-        date+=(nowDate.getMonth() + 1)+'-'
+      else {
+        date += (nowDate.getMonth() + 1) + '-'
       }
-      if(nowDate.getDate()<10){
-        date+='0'+nowDate.getDate()
+      if (nowDate.getDate() < 10) {
+        date += '0' + nowDate.getDate()
       }
-      else{
-        date+=nowDate.getDate()
+      else {
+        date += nowDate.getDate()
       }
       to.setAttribute("max", date);
       if (from != "") {
@@ -339,30 +360,58 @@
     }
   </script>
   <script>
-    function createPDF() {
-        var sTable = document.getElementById('tab').innerHTML;
-
-        var style = "<style>";
-        style = style + "table {width: 100%;font: 17px Calibri;}";
-        style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
-        style = style + "padding: 2px 3px;text-align: center;}";
-        style = style + "</style>";
-
-        // CREATE A WINDOW OBJECT.
-        var win = window.open('', '', 'height=700,width=700');
-
-        win.document.write('<html><head>');
-        win.document.write('<title>Sales Report</title>');   // <title> FOR PDF HEADER.
-        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
-        win.document.write('</head>');
-        win.document.write('<body>');
-        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
-        win.document.write('</body></html>');
-
-        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
-
-        win.print();    // PRINT THE CONTENTS.
+    function monthclick() {
+      var month = document.getElementById('month')
+      var nowDate = new Date();
+      var date = nowDate.getFullYear() + '-'
+      if ((nowDate.getMonth() + 1) < 10) {
+        date += '0' + (nowDate.getMonth() + 1)
+      }
+      else {
+        date += (nowDate.getMonth() + 1)
+      }
+      console.log(date)
+      month.setAttribute("max", date);
     }
+  </script>
+  <script>
+    function createPDF() {
+      var sTable = document.getElementById('tab').innerHTML;
+
+      var style = "<style>";
+      style = style + "table {width: 100%;font: 17px Calibri;}";
+      style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+      style = style + "padding: 2px 3px;text-align: center;}";
+      style = style + "</style>";
+
+      // CREATE A WINDOW OBJECT.
+      var win = window.open('', '', 'height=700,width=700');
+
+      win.document.write('<html><head>');
+      win.document.write('<title>Sales Report</title>');   // <title> FOR PDF HEADER.
+      win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+      win.document.write('</head>');
+      win.document.write('<body>');
+      win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+      win.document.write('</body></html>');
+
+      win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+      win.print();    // PRINT THE CONTENTS.
+    }
+  </script>
+  <script>
+    function year_search(){
+      var a=document.getElementById('year').value;
+      var check=/^[0-9]+$/
+      if((!check.test(a)) || (a.length!=4)){
+        $("#err").show()
+    }
+    else{
+      document.getElementById('year_form').submit();
+    }
+
+  }
   </script>
 </body>
 

@@ -40,7 +40,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 <body>
 	<!-- top-header -->
-	
+
 	<!-- //top-header -->
 	<!-- header-bot-->
 	<div class="header-bot">
@@ -58,7 +58,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!-- header-bot -->
 			<div class="col-md-8 header">
 				<!-- header lists -->
-				
+
 				<!-- //header lists -->
 				<!-- search -->
 				<div class="agileits_search">
@@ -94,25 +94,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="container">
 			<div class="agileits-navi_search">
 				<ul class="nav navbar-nav menu__list">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle nav-stylehead" data-toggle="dropdown"
-						role="button" aria-haspopup="true" aria-expanded="false">Categories
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu multi-column columns-2">
-						<div class="agile_inner_drop_nav_info">
-							<div class="col-sm-4 multi-gd-img">
-								<ul class="multi-column-dropdown">
-									{% for c in cat %}
-									<li>
-										<a href="{% url 'category' c.id %}">{{c.cat_name}}</a>
-									</li>
-									{% endfor %}
-								</ul>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle nav-stylehead" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expanded="false">Categories
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu multi-column columns-2">
+							<div class="agile_inner_drop_nav_info">
+								<div class="col-sm-4 multi-gd-img">
+									<ul class="multi-column-dropdown">
+										{% for c in cat %}
+										<li>
+											<a href="{% url 'category' c.id %}">{{c.cat_name}}</a>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
 							</div>
-						</div>
-					</ul>
-				</li></ul>
+						</ul>
+					</li>
+				</ul>
 			</div>
 			<div class="top_nav_left">
 				<nav class="navbar navbar-default">
@@ -130,9 +131,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<!-- Collect the nav links, forms, and other content for toggling -->
 						<div class="collapse navbar-collapse menu--shylock" id="bs-example-navbar-collapse-1">
 							<ul class="nav navbar-nav menu__list">
-								<li >
+								<li>
 									<a class="nav-stylehead" href="/">Home
-										
+
 									</a>
 								</li>
 								{% if user %}
@@ -155,7 +156,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 														<a href="/logout">Logout</a>
 													</li>
 												</ul>
-											</div>	
+											</div>
 										</div>
 									</ul>
 								</li>
@@ -200,15 +201,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<ul class="slides">
 							<li data-thumb="{{pro.img1.url}}">
 								<div class="thumb-image">
-									<img src="{{pro.img1.url}}" data-imagezoom="true" class="img-responsive" alt=""> </div>
+									<img src="{{pro.img1.url}}" data-imagezoom="true" class="img-responsive" alt="">
+								</div>
 							</li>
 							<li data-thumb="{{pro.img2.url}}">
 								<div class="thumb-image">
-									<img src="{{pro.img2.url}}" data-imagezoom="true" class="img-responsive" alt=""> </div>
+									<img src="{{pro.img2.url}}" data-imagezoom="true" class="img-responsive" alt="">
+								</div>
 							</li>
 							<li data-thumb="{{pro.img3.url}}">
 								<div class="thumb-image">
-									<img src="{{pro.img3.url}}" data-imagezoom="true" class="img-responsive" alt=""> </div>
+									<img src="{{pro.img3.url}}" data-imagezoom="true" class="img-responsive" alt="">
+								</div>
 							</li>
 						</ul>
 						<div class="clearfix"></div>
@@ -218,15 +222,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="col-md-7 single-right-left simpleCart_shelfItem">
 				<h3>{{pro.pro_name}} - {{pro.quantity}}g</h3>
 				<p>
-					{% if pro.offer == 0 and pro.category.offer == 0 %} {% elif pro.offer > pro.category.offer  %}
-									<h3 class="item_price">{{pro.offer}}% Off</h3>
-									{% else %}
-									<h3 class="item_price">{{pro.category.offer}}%</h3>
-									{% endif %}
-					<span class="item_price">Rs.{{pro.finalprice}}</span>
-					{% if pro.offer == 0 and pro.category.offer == 0 %} {% else %}
-					<del>Rs. {{pro.price}}</del>
-					{% endif %}
+					{% if pro.offer == 0 and pro.category.offer == 0 %} {% elif pro.offer > pro.category.offer %}
+				<h3 class="item_price">{{pro.offer}}% Off</h3>
+				{% else %}
+				<h3 class="item_price">{{pro.category.offer}}%</h3>
+				{% endif %}
+				<span class="item_price">Rs.{{pro.finalprice}}</span>
+				{% if pro.offer == 0 and pro.category.offer == 0 %} {% else %}
+				<del>Rs. {{pro.price}}</del>
+				{% endif %}
 				</p>
 				<div class="single-infoagile">
 					<ul>
@@ -242,12 +246,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</ul>
 				</div>
 				<div class="product-single-w3l">
-					<p><i class="fa fa-hand-o-right" aria-hidden="true"></i>{{pro.desc}}</p> 
+					<p><i class="fa fa-hand-o-right" aria-hidden="true"></i>{{pro.desc}}</p>
 				</div>
-				<div class="occasion-cart">
-					<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
-						<button class="acart btn btn-primary" data-index="{{pro.id}}">Add to Cart</button>
+				<div class="row">
+					<div class="occasion-cart col-md-3">
+						<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+							<button class="acart btn btn-primary" data-index="{{pro.id}}">Add to Cart</button>
+						</div>
 					</div>
+					{% if user %}
+					<div class="occasion-cart col-md-3">
+						<div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+							<a href="{% url 'buy_now' pro.id %}"><button class="acart btn btn-primary">Buy
+									Now</button></a>
+						</div>
+					</div>
+					{% endif %}
 				</div>
 			</div>
 			<div class="clearfix"> </div>
@@ -626,10 +640,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				dataType: 'json',
 				success: function (res) {
 					console.log(res.f)
-					if(res.f==0){
-						window.location='/signin'
+					if (res.f == 0) {
+						window.location = '/signin'
 					}
-					else{
+					else {
 						Swal.fire('Added to Cart')
 					}
 				}

@@ -207,7 +207,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="checkout-left">
 				<div class="address_form_agile">
 					<h4>Add a new Details</h4>
-					<form action="/getnewaddr" method="post" class="creditly-card-form agileinfo_form">
+					<form action="/getnewaddr" method="post" id="newaddr" class="creditly-card-form agileinfo_form">
 						{% csrf_token %}
 						<div class="creditly-wrapper wthree, w3_agileits_wrapper">
 							<div class="information-wrapper">
@@ -248,7 +248,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										</div>
 									</div>
 								</div>
-								<button class="submit check_out" id="reg">Delivery to this Address</button>
+								<button type="button" class="submit check_out" onclick="reg()">Delivery to this Address</button>
 							</div>
 						</div>
 					</form>
@@ -633,22 +633,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</script>
 	<script>
 		$(document).ready(function () {
-			var n = 0, c = 0, num = 0, p = 0, a = 0
-			$('#reg').attr('disabled', true)
 			$("#name").blur(function () {
 				var fname = $(this).val()
 				var check = /^[A-Za-z]+[\s]?[A-Za-z]*$/
 				if (!check.test(fname)) {
 					$("#err1").show()
-					n = 0
-					$('#reg').attr('disabled', true)
 				}
 				else {
 					$("#err1").hide()
-					n = 1
-					if ((n == 1) && (c == 1) && (num == 1) && (p == 1) && (a == 1)) {
-						$('#reg').attr('disabled', false)
-					}
 				}
 			})
 
@@ -657,15 +649,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				var check = /^[A-Za-z]+$/
 				if (!check.test(fname)) {
 					$("#err3").show()
-					c = 0
-					$('#reg').attr('disabled', true)
 				}
 				else {
 					$("#err3").hide()
-					c = 1
-					if ((n == 1) && (c == 1) && (num == 1) && (p == 1) && (a == 1)) {
-						$('#reg').attr('disabled', false)
-					}
 				}
 			})
 			$("#num").blur(function () {
@@ -673,15 +659,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				var check = /^[0-9]+$/
 				if ((!check.test(num)) || (num.length != 10)) {
 					$("#err2").show()
-					num = 0
-					$('#reg').attr('disabled', true)
 				}
 				else {
 					$("#err2").hide()
-					num = 1
-					if ((n == 1) && (c == 1) && (num == 1) && (p == 1) && (a == 1)) {
-						$('#reg').attr('disabled', false)
-					}
 				}
 			})
 			$("#pin").blur(function () {
@@ -689,15 +669,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				var check = /^[0-9]+$/
 				if ((!check.test(num)) || (num.length != 6)) {
 					$("#err4").show()
-					p = 0
-					$('#reg').attr('disabled', true)
 				}
 				else {
 					$("#err4").hide()
-					p = 1
-					if ((n == 1) && (c == 1) && (num == 1) && (p == 1) && (a == 1)) {
-						$('#reg').attr('disabled', false)
-					}
 				}
 			})
 			$("#addr").blur(function () {
@@ -705,20 +679,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				var check = /^[A-Za-z\s]+$/
 				if (!check.test(num)) {
 					$("#err5").show()
-					a = 0
-					$('#reg').attr('disabled', true)
-
 				}
 				else {
 					$("#err5").hide()
-					a = 1
-					if ((n == 1) && (c == 1) && (num == 1) && (p == 1) && (a == 1)) {
-						$('#reg').attr('disabled', false)
-					}
 				}
 			})
 
 		})
+		function reg(){
+			var name=document.getElementById('name').value;
+			var city=document.getElementById('city').value;
+			var num=document.getElementById('num').value;
+			var pin=document.getElementById('pin').value;
+			var addr=document.getElementById('addr').value;
+			var ncheck = /^[A-Za-z]+[\s]?[A-Za-z]*$/
+			var ccheck = /^[A-Za-z]+$/
+			var ncheck = /^[0-9]+$/
+			var acheck = /^[A-Za-z\s]+$/
+			if((ncheck.test(name))&&(ccheck.test(city))){
+				if((ncheck.test(num))&&(num.length==10)&&(ncheck.test(pin))&&(pin.length == 6)){
+					if(acheck.test(addr)){
+						document.getElementById('newaddr').submit()
+					}
+				}
+			}
+
+		}
 	</script>
 
 	<!-- //smooth-scrolling-of-move-up -->
@@ -730,7 +716,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 	<script>
 		$(document).on("click", "#ccheck", function () {
+			
 			var code = $('#ccode').val()
+			console.log(code)
 			$.ajax({
 				url: "{% url 'coupon_apply' %}",
 				type: 'GET',
