@@ -187,12 +187,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				
 				
 				<label>Price range:</label>
+				<select name="price" id="priceso" onchange="pricesort()">
+					<option value="0">Low to High</option>
+					<option value="1">High to Low</option>
+				</select>
 				<form action="/price_sort" method="post">
 					{% csrf_token %}
-					<input type="number" name="min" id="min" placeholder="Min Price">
-					<input type="number" name="max" id="max" placeholder="Max Price">
+					<input type="hidden" name="price" id="price" value="0">
 					<input type="hidden" name="cname" value="{{cname}}">
-					<button id="price_btn" class="btn btn-primary" type="submit">Search</button>
+					<button class="btn btn-primary" type="submit">Search</button>
 				</form>
 			
 			</div>
@@ -726,6 +729,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			});
 
 		});
+	</script>
+	<script>
+		function pricesort(){
+			console.log(document.getElementById('priceso').value)
+			document.getElementById('price').value=document.getElementById('priceso').value
+		}
 	</script>
 	<!-- //smooth-scrolling-of-move-up -->
 
