@@ -201,7 +201,7 @@
 		function sub(){
 			var name=document.getElementById('cat').value;
 			var check = /^[A-Za-z]+$/
-			if(!check.test(name)){
+			if(check.test(name)){
 				document.getElementById('catsub').submit()
 			}
 		}
