@@ -694,10 +694,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			var addr=document.getElementById('addr').value;
 			var ncheck = /^[A-Za-z]+[\s]?[A-Za-z]*$/
 			var ccheck = /^[A-Za-z]+$/
-			var ncheck = /^[0-9]+$/
+			var numcheck = /^[0-9]+$/
 			var acheck = /^[A-Za-z\s]+$/
 			if((ncheck.test(name))&&(ccheck.test(city))){
-				if((ncheck.test(num))&&(num.length==10)&&(ncheck.test(pin))&&(pin.length == 6)){
+				if((numcheck.test(num))&&(num.length==10)&&(numcheck.test(pin))&&(pin.length == 6)){
 					if(acheck.test(addr)){
 						document.getElementById('newaddr').submit()
 					}
