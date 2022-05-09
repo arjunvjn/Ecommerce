@@ -95,7 +95,6 @@ def home(request):
 @never_cache
 def user(request):
     if request.user.is_authenticated:
-        User.objects.filter(is_active=False).delete()
         usr = Userprofile.objects.all()
         return render(request, 'adminside/useradmin.html', {'user': usr})
     else:
