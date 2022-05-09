@@ -67,7 +67,6 @@ def signup(request):
     if request.session.has_key('login'):
         return redirect('/')
     elif request.method == 'POST':
-        User.objects.filter(is_active=False).delete()
         num = request.POST['num']
         uname = request.POST['uname']
         lname = request.POST['lname']
@@ -104,7 +103,6 @@ def signin(request):
     if request.session.has_key('login'):
         return redirect('/')
     elif request.method == "POST":
-        User.objects.filter(is_active=False).delete()
         uname = request.POST['user']
         psw = request.POST['psw']
         user = auth.authenticate(username=uname, password=psw)
@@ -130,7 +128,6 @@ def signin_num(request):
     if request.session.has_key('login'):
         return redirect('/')
     elif request.method == "POST":
-        User.objects.filter(is_active=False).delete()
         num = request.POST['num']
         if Userprofile.objects.filter(number=num).exists():
             usr = Userprofile.objects.get(number=num)
